@@ -1,0 +1,1639 @@
+Understanding Swift Performance 416
+Kyle Macomber Software Engineer - white male
+Arnold Schwaighofer Swift Performance Engineer - white male
+
+Allocation
+On stack is fast
+Heap is slow, need to search for block of memory and thread safety
+Classes are allocated on heap
+Strings are stored on the heap
+Think about using structs for dictionary keys
+
+Reference counting has overhead to validate counts and thread safety
+If you need UUID use UUID type not String
+Use enums for limited key sets to avoid heap allocation
+
+Inlining is really fast for static dispatch
+Mark classes as final if you won’t override them
+
+Protocol dynamic dispatch doesn’t use V-Table, uses protocol witness table
+Existential container manage references to protocol types (structs)
+Also has references to value witness container
+Walk through of generated code for protocols
+Specialisation of generics can increase code size(no necessarily - inlining) but is faster because of static method dispatch
+
+Use structs where possible
+
+What’s New in Auto Layout 236
+Jason Yao Interface Builder Engineer - non white male
+Jesse Donaldson AppKit Engineer - white male
+Marian Golden UIKit Engineer - white female
+
+Views with no constraints can now be set in IB
+For progressive auto layout introduction
+Demo of autolayout
+
+New tune warning levels in IB
+NSGridview new to OSX good for settings screens especially
+
+Avoiding Layout Feedback Loop
+Caused by upstream set needs layout
+Don’t change bounds of superview
+
+Ambiguous layout loops can happen when layout oscillates between invalid layouts
+
+Concurrent Programming with GCD in Swift 3 720
+Matt Wright Darwin Runtime Engineer - white male
+Pierre Habouzit Runtime Engineer - white male
+
+Concurrency allows us to avoid doing hard work on main queue
+Create dispatch queue with a label
+
+Thread explosion can happen if you’re not sensible with dispatch queues
+DispatchGroup() in swift and pass as parameter to .async()
+Be careful with synchronous queues causing deadlock
+Use Quality of Service on .async (quality of service) 
+DispatchWorkItem can capture current quality of service. Also has wait
+
+Class and lazy properties are not atomic in swift
+
+Can use a dispatch queue to return state in a safe way using .sync in getters
+  
+Going Server-side with Swift Open Source 415
+Philippe Hauslet Frameworks Engineer - white male
+John Ponzo IBM MobileFirst CTO - white male
+Patrick Bohrer Swift Technical Lead, IBM - white male
+
+Code can be reused both locally and on the sever
+Linux and Mac supported
+Standard Library, Foundation, Dispatch and XCTest
+
+Swift sandbox: swiftlang.ng.bluemix.net
+Swift package catalog
+IBM cloud tools for swift
+github.com/IBM-Swift/BluePic
+
+Demo of end to end development - worth a watch
+
+Making Apps Adaptive Part 2 233
+David Duncan iOS Apps and Frameworks - non-white male
+Kurt Revis iOS Apps and Frameworks - white male
+
+
+Presentation change depending on size classes
+Use Dynamic Type, Layout Guides, UIAppearance, Asset Catalogs
+Readable content guide is contained by layout margins and defines a good reading length 
+Make design based on simple rules to do with view
+
+Layout code goes in viewWillLayoutSubviews
+Beware it’s hot path
+
+ViewWillTransition to size coordinator enables you to control transitions between sizes
+
+Reusable Elements
+Using container view controllers
+Design object to store layout. Move display logic to here
+
+
+Working with Wide Colour 712
+Understanding and optimising for Wide Colour Gamut Displays
+Justin Stoyles Graphics and Media - white male
+Patrick Heynen Cocoa Frameworks -  white male
+Steve Holt UIKit - white male
+
+Colour Gamut is all the colours than can be defined
+sRGB is current standard
+New standard based on DCI-P3
+Apple individual configures displays
+16 bit colours instead of 8bit
+
+Colour management ensures that colours look good on all devices
+Available from iOS 9.3 and always on Mac
+
+No need to change all content to P3 now
+Upgrade as new quality content is released
+Use asset catalogs to get some of the benefits
+
+New GPU Compression ASTC
+
+Communicate colours with colour space as well as values
+In code UIColor(displayp3) and constructor doesn’t clamp to 1-0
+
+New UIGraphicsImageRendered for wide colour spaces on iOS 
+
+Debugging Tips and Tricks 417
+Xcode 8 edition
+Kate Stone - white female
+Enrico Granata - white male
+Sean Callanan - white male
+Jim Ingham - white male
+
+New can use terminal for LLDB 
+:type lookup xxxxx is very useful (in swift real)
+Use colon in swift repl to go to lldb and swift to go back
+Lldb —help
+
+Stepping actions
+Command alias for lldb 
+Use lldbinit to pass in your commands
+Can use frame variable to view variable without side effect
+parray, poarray new function to lldb  
+Can use backpacks to run command and use result
+
+Register read can read register values
+New automatically import modules so you don’t need to worry about sending message to id
+Can declare variables with $name to reuse it also declare functions
+LLDB applies fixits to correct typos in expression
+
+Breakpoints are really searches Xcode uses lldb for it all
+Searches use regex as always operating on strings 
+Can search on all kinds of fields, class, function, threads ect.
+Image list xxxxx command tells what version your building
+
+
+Neural Networks and Accelerate 715
+Eric Bainville Core OS, Vector and Numerics Group -  white male
+Steve Canon Core OS, Vector and Numerics Group- white male
+
+Image processing vImage
+Signal Processing vDSP
+Linear algebra: BLAS, 
+Vector extensions: simd
+Lossless compression: Compression
+
+How to use accelerate
+Import, and link in build phase
+Lzfse open source
+
+BNNS = Basic neural network subroutings
+Do training offline and ship weights with the app
+BNNS is fast
+Details on using neural nets
+
+Quadrature
+Integration functions
+
+Simd
+Does vector math
+Graphics and shader
+
+Orient function to find if points on line, in circle or sphere and direction of things without worrying about float precision being off
+
+
+Protocol and Value Orientated Programming in UIKit Apps 419
+Swift in practice
+Jacob Xiao Protocol Oriented Programmer - white male
+Alex Migicovsky Swift Compiler Typo engineer - white male
+
+Local Reasoning: Can code be understood without lots of outside context
+Use structs to improve reasoning
+
+
+Use struct as a view holder that can handle layout
+￼
+
+Use composition to build small understandable pieces together
+
+Delivering an Exceptional Audio Experience 507
+A guide to audio best practices and APIs
+Saleem Mohammed Audio Craftsman - non white male
+Doug Wyatt Audio Plumber - white male
+Torrey Holbrook Walker The Demonstrator - non-white male
+
+AVAudioSession
+Make sure to sign up for and handle notifications (update ui to paused, output device changed etc)
+Set mode and category for interaction with other apps audio
+Manage activation
+
+New API allow airplay and bluetooth during playback
+hasHardwareVoiceCallProcessing
+
+AVAudioPlayer: simplest way to play audio from file
+AVAudioRecorder: simplest way to record
+AVPlayer: playback local and streaming audio
+
+Advanced Use Cases: AVAudioEngine (superceeds au graph)
+Simplifies real time audio
+Manage a graph of nodes: input, processing, mixing, output
+Can be used for 3D audio
+
+AV prefixed classes supersede older versions
+
+AVAudioSession come to watch
+
+Multichannel Audio on tvOS
+Can get view of connected hardware to decide how many channels
+
+Real Time Audio
+Low latency
+Constrained so can’t do expensive operations
+Developers can host audio units or build your own audio units
+Audio components below audio units
+AudioUnit application extensions modern
+Interapp audio nodes on iOS only
+AUAudioUnit preferred interface
+Demo of auaudiounit
+
+MIDI
+
+Measurements and Units 238
+Using locale-appropriate measurements in your app 
+Daphne Larose Software Engineer, Foundation - non-white female
+Peter Hosey Software Engineer, Foundation - white male
+
+Units have a symbol
+Measurements can be treated as numbers
+>170 pre packaged units
+
+￼
+
+Measurements of different types can be added together within the same dimension
+Conversion - defines conversion between unit and base unit for dimension
+International formatting is handled by measurement formatter
+Set .unitOptions to provided unit to avoid translation
+Can change locale in build scheme
+
+Iterative UI Design 805
+Ryan Olshavsky Designer, iWork - white male
+Jonathan Cho Designer, iWork - non-white male
+
+Answering questions:
+What are we making?
+1: Collect features
+2: Work out who the customer is. What are their goals?
+3: What are your goals as a developer. What should the app be like?
+Align the answers
+
+Start with what you know
+
+Keynote can be useful for design
+Iterate on design and produce an array of designs
+Measure the designs by your goals. Also does it feel intuitive, include the information and feel right. (All subjective but that’s ok)
+Build on initial scenes to workflows
+
+
+Using and Extending the Xcode Source Editor 414
+Mike Swingler Xcode Infrastructure and Editors - white male
+Chris Hanson  Xcode Infrastructure and Editors - white male
+
+New SF font for 
+Cmd alt slash for documentation
+Can filter navigation items in breadcrumbs
+Fuzzy matching in Xcode 8!
+Image literals in source editor
+call Color for colour literals
+Cmd + e copy in to system paste board
+Cmd + ctrl e edit in place
+Cmd + option + square bracket to move code blocks around
+Cmd + ctrl + G to scroll through global find results
+
+Source editor extensions
+Runs in own process 
+Sandboxed and uses entitlements
+Stability, Security and Speed
+Can be sold in Mac App Store
+Xcode find and starts your extensions
+Infoplist to specify commands
+Extensions listed in alphabetical order
+Your commands stay in order
+Commands are passed invocation which has command identifier, cancelation handler
+
+Source text buffer is the representation of the text
+
+Demo
+Running extensions runs a dark version of Xcode for testing
+Can debug your own extensions
+Can add keybindings for your commands
+Xcode locks out changes which command is running
+Offers users a cancel command
+
+
+What’s New in CloudKit 226
+There’s a lot we want to share
+Paul seligman CloudKit Engineer - white male
+Jacob Farkas CloudKit Engineer - white male
+Vanessa Hong CloudKit Engineer - non-white male
+
+Containers contain database, public, private, shared
+Zones in databases
+CloudKitJs last year 
+Added to watchOS this year
+Can use CloudKit without App Store on Mac
+
+Web interface used to keep db updated/import/export
+
+Watch can use it without phone
+Has most API
+Replacement for connectivity
+Bear in mind limited resources
+
+Telemetry 
+New tab in web 
+Get performance metrics
+
+API Improvements
+Longlived operations can carry on even if your app exits. Will get them back from cache
+7 day limit for request completion
+
+Database subscription and pending change operation
+To get updates efficiently. Old API deprecated
+Reduces round trips
+Fetch multiple changes
+Get a cache token to resume big downloads
+
+Sharing
+Create a share with a root record
+Every share has url that identifies it. Brings up UI for accepting (old os falls back to web)
+Modifications are shared in shared docs
+Apple provide UI
+CloudKitJS gets sharing and provides UI too
+
+Multiple shares are managed by zones and must have parent reference to modify
+Data counts towards creators quota
+
+Invited users must be authenticated with iCloud
+
+Can provide a fallback url for users without app installed or not up to date os
+
+Engineering Privacy for Your Users 709
+Jessie Pease Privacy Engineering - white male
+Julien Freudiger Privacy Engineer - white female
+
+Favour short lived and random identifiers
+Allow users to be Annonymous
+Identify sessions and not users
+
+￼
+
+Bucket, sample and aggregate data
+
+Differential privacy
+Strong mathematical guarantees 
+Can only learn from aggregate data
+
+
+Blue add button will show info about the add. You can see which group you’re being targeted for
+Can see all your advertising data in settings
+CloudServices permissions are fine grained
+SpeechRecognition requires permissions because may capture speech
+SiriKit requires permissions too
+TVProvider Permissions
+Homekit permissions
+
+￼
+
+
+Need info plist reasons for all of the above!!!
+
+App will crash without permissions
+Pasteboard has expiration time and local only setting to avoid universal clipboard
+Use shared containers instead of named pasteboards to share between apps
+Find pasteboard will yield empty object
+Name pasteboards will be default to non persistent
+
+CoreSpotlight: Not every tap should result in nsuseractivity
+Widgets should respect privacy because available on lock screen
+
+Getting the Most Out of HealthKit 209
+What’s new and best practices
+Matthew Sales iOS Software Engineer - white male
+Joefrey Kibuule iOS Software Engineer  - non-white male
+
+Authorization
+Users are in control if you have write only access you can still query your apps data unless they remove permission
+Watch auth requests from phone only
+
+Activity rings API
+Distinct from authorisation 
+Show on black background
+Request read access to health share usage
+Demo - Straight forward to implement
+
+Health Records
+Patient visit documents 
+Access granted on per document basis
+Save XML format in to document which is validated
+Seems like a lot of content for health service providers
+
+Wheelchair support
+Motion tracking for wheelchair users
+
+Thread Sanitizer and Static Analysis 412
+Help with finding bugs in your code
+Anna Zaks Manager, Program Analysis Team - white female
+Devin Coughlin Engineer, Program Analysis Team - white male
+
+Address Sanitizer is very effective at finding memory issues
+New Thread Sanitizer can help find common threading issues
+
+Enable in scheme -> Diagnostics
+Explore issues in the issue navigator
+
+Data Race: Multiple thread accessing same data and some of those operations are write
+Use existing solutions don’t roll your own e.g. Sync a thread
+Use highest level API
+GCD, Pthread mutual, os_unfair_lock
+
+Thread sanitiser can find data races even when they don’t occur
+Run tests with thread sanitzer on
+
+Static Analyzer
+New Features: 
+Localizability to find un localised strings
+Always provide comments with localised description
+Shows path to text
+Check for missing comment is off by default but should be turned on
+
+Nullability analyser for obj c
+
+
+Core Location Best Practices 716
+Privacy and power
+Brad Jenson Apple Inc - white male
+
+Authorisation - in use or always
+Must provide reason for each
+In use, blue bar, handling watch
+
+Can have background session but should start from foreground
+
+Region monitoring
+Circular regions, beacon regions
+Limited resource so must start and stop
+
+UNLocalNotificationFramework have a trigger so can homekit
+
+Location change monitoring probably not what you want, try visit monitoring
+Suitable for all day use 
+
+Geocoding api can go both ways but is rate limited
+￼
+￼
+
+Best practise: 
+Must respect the users privacy
+Don’t ask for more than you need
+Make it clear why you’re asking
+Don’t persist location information insecurely
+Power: highly variable power costs
+￼
+
+Use when in use authorisation wherever possible
+CLLocationManager requires a run loop so you can create it on the main thread
+Prefer request location 
+Set desired accuracy to lowest tolerable value
+Enable deferred location updates
+Energy log is a good metric
+Manage allowsBackgroundUpdates property
+Monitoring continues until explicitly stopped so keep this object alive and stop on launch
+
+Making the most of search APIs 223
+New features and updates expand search capabilities
+Vipul Ved Prakash Apple, Inc - non white male
+John Hornkvist Apple, Inc - white male
+
+Search API Extensions
+Spotlight is on Notification Center and lock screen 
+
+iOS9
+CoreSpotlight for any App Content
+NSUserActivity View App Content
+Universal Links AppContent on Web
+
+New to iOS 10
+Search in App -> takes query to app
+CoreSpotlight search api so you can use it in app
+Differential Privacy
+Visual preview before adding to search index
+
+Indexing content
+You decide what you want to add
+Delete items from index when they aren’t relevant either by individual item, a group or whole app
+Don’t block main thread when indexing your content
+Use expiration dates to keep index clean
+Use background fetch or silent push to update
+
+If user might want to get back to an item use nsuseractivty 
+In ios10 you can add group (domain) identifiers to nsuseractivities
+
+Universal links shown in content and safari
+￼
+
+
+Search.developer.com has a test tool
+
+Use common url so iOS can de dupe results
+
+Correct metadata will help iOS show results in more interesting ways
+Enable quick actions for results and don’t use interstitial 
+App delegate is called with NSUserActivity to restore content
+
+Search continuation to bring search from spotlight in to app
+Spotlight api can be used for text completion and search in app metadata
+
+Spotlight ranking
+Engagement ratio: Device, per query, global
+Universal link popularity 
+
+Internationalization Best Practices 201
+Karan Misra Internationlization Software Engineer - non white male
+
+Multilingual Keyboards
+Localised keyboard
+Use new Measurement Formatter to handle internationalisation
+Locales have hierarchy
+Bundle.main().preferredLocalizations().first to send to server
+Don’t touch locale strings
+
+Formatters
+Don’t use specific string styles, use system formats or use template format
+Use person name components 
+Can parse names out of strings now in multi languages
+
+Layout
+Use UIStackView and NSStackview whenever you can
+Don’t use clip to bounds on labels
+Use preferredFont style api
+Use built in tableview styles if possible
+
+Iconography
+Make sure it works well with RTL
+
+App Names should be localized
+Localized screenshots
+
+Go over and beyond the basics to surprise and delight international users
+
+
+NSURLSession: New Features and Best Practices 711
+Jeff Jenkins Software Engineer, Internet Technologies - white male
+Andreas Garkuscha Software Engineer Internet Technologies - white male
+
+Use NSURLSession
+Benefits: HTTP 1.1, SPDY, HTTP 2, ATS (transport security), Strict transport security, Cache, cookie, proxy, configuration
+Avoid 1 task per session model. Use multiple tasks per session
+
+Http 2 has better performance: header compression, Multiplexing,  stream priorities 
+New support for Server Push - Needs server support
+Server push reduces number of round trips by responding with assets with original requests
+Can be 2-3 times faster without changing any code in app 
+
+Networking statistics
+NSURLTaskTransactionMetrics
+Request/Response
+Protocol and Connection
+Load Info
+Connection Establishment and Transmission
+
+Security
+TLS - RC4 no longer supported as a cipher
+
+WKWebView Can enable arbitrary load
+Also can able certificate transparency
+
+
+Quick Interaction Techniques for watchOS 211
+Tom Witkin watchOS Engineer - white male
+Miguel Sanchez watchOS Engineer - non-white male
+
+Gesture Recognizers now supported
+Swipe, tap, pan and long press
+System gestures will override yours
+
+Direct access to crown
+Rotations per seconds, rotational deltas Double (1 rotation = 1) can be negative. normalised for orientation by system
+There elements can take over Digital Crown focus
+Can opt in to itemPagination and works with table using segues api
+
+Notifications
+Response to notifications can be foreground or background
+Implement UNUserNotificationCenterDelegate
+Can react to notifications with ui or within app if open
+Can be rich: include media, sprite kit ect
+
+Sprite kit and scene kit can be presented
+All apps should have complication
+Provide instant feedback (Use background download task, background task assertion)
+
+A Peek at 3D Touch 228
+Enhancing your apps for the next dimension of touch
+Tyler Fox UIKit Frameworks Engineer - white male
+Peter Hajas UIKit Frameworks Engineer - white male
+
+Widgets now show in quick actions from home screen
+3D Touch accelerate access to existing features
+Enable new experience
+Expected by users
+
+Can have dynamic and static quick actions
+Static define in info plist and available straight away
+Dynamic shown after static actions
+Can provide icons
+Demo of implementation 
+Be prepared to handle dynamic quick actions from previous app versions
+
+If user functionality can be tapped then it should support peek and pop
+Demo/code of peek pop
+Preview = peek, commit = pop
+Implement UIViewControllerPreviewDelegate
+Set source rect to pull out the view area
+Return ViewController quickly for preview
+Similar content should be previewed consistently
+Do transition in commit and UIKit handles animation
+Override previewActions to provide actions. These can be grouped
+Have different styles:  Selected, destructive, normal
+
+In iOS 10 can add custom peek/pop animations 
+Demo of adding these
+LowLevel force API come in with gestures
+
+
+Leveraging Touch Input on iOS 220
+… And getting the most out of Apple Pencil
+Dominik Wagner UIKit Engineer - white male
+
+Capture gesture from UIGestureRecognizer, UIView, The responder chain if necessary
+Import UIGestureRecognizerSubclass only in subclass
+Handle missed touches because touches will be coalesced
+Incoming rate can be up to 240hz and refresh rate is 60hz
+Don’t try drawing faster than screen
+Use setNeedsDisplay and implement draw - ideally in rect if you can
+Draws asynchronously on layer set to true
+Get predicted touches to reduces the appearance of lag even more
+
+Apple Pencil has higher precision API, force and maximum force api (can calculate perpendicular force), tilt API
+With force api touches moved now called more often
+Can set gestures to restrict touches to pencil or touch
+
+Making Apps Adaptive Part 1 222
+Kevin Cathey Interface Builder Engineer -white male 
+Brent Shank  Interface Builder Engineer - white male
+
+Make 1 app for all sizes - the system is going to do most the work for you
+Over 300 combinations of display
+
+Traits - describe the environment the app is running in
+Size classes, Dynamic type, Layout direction, Display Gamut, Interface style, 3D touch
+Reacting to corse changes - compact/regular
+Width is the most common trait
+Size classes can change dynamically
+Autolayout handles fine grain changes
+Traits are passed all the way down the view calling traitCollectionDidChange:
+Possible to change trait collection as it propogates
+Make sure to react only to the traits you’re interested
+IB/Asset catalog/UIAppearance can respond for you
+Pixel perfect rendering in IB + zoomable
+Adaptations for iPads are display too (split view, slide over)
+Good demo of the basics for traits
+
+
+
+What’s New in UICollectionView in iOS 10 219
+Steve Green UIKit Frameworks Engineer - white male
+Peter Hajas UIKit Frameworks Engineer - white male
+
+Smooth Scrolling
+Heavy loading cells can cause dropped frames
+16ms for 60fps
+Cells are preloaded and held on to for a little longer in ios10
+This behaviour works for multiple column layouts too
+Enabled by default for iOS10 but you can opt out if needed
+Cell for itemAtIndexPath might never be shown so beware
+New PrefetchDatasource to prefetch assets async
+Prefetch api, do work in background straight away
+If user scrolls fast there’s no prefetching - it’s adaptive
+Use cancel fetching to prioritise correct items
+All API available for tableview too
+
+Improvements to self sizing cells
+Enabled estimateItemSize = something to get sizing
+Either use autolayout
+Or manual sizeThatFits or preferredLayoutAttributes
+Now estimatedSize can be set to automatic (ideally your cells have similar widths or sizes)
+
+Interactive reordering (iOS9 available)
+See last years session
+Paging for now available
+
+Refresh control is now just a scrollview property
+
+Inclusive App Design 801
+Best practices for being world-ready
+Caroline Cranfill Designer and Production Manager, Human Interface - white female
+
+Make your app inclusive early on in the development cycle
+67% of users are international
+1Billion worldwide with a disability
+
+Typography
+Preview in other localisations e.g. Chinese doesn’t have caps
+Use font size, colour and style
+Some language font’s don’t work with italic
+Leaning towards larger font size will be better for legibility
+Clip to bounds can cut of extra tall characters and cloud meaning 
+Use multiple levels of change to indicate hierarchy
+Use dynamic design - translations can be 2-3 times longer
+Dynamic type is highly used so support it
+Styles for default styles are available
+Readable content guide uses variable margins - this should be used esp for iPad Pro
+Use leading and trailing attributes for RTL
+Colours bring emotions. Popular colours are blue, green, red
+1 in 12 men are colour blind so make sure multiple differentiations are used
+Grey scale is a useful metric for checking contrast
+Contrast required changes at different scales e.g. Small scale need higher contrast
+Symbols can be interpreted differently for different cultures
+Iconography should match UI for RTL
+Get feedback from natives of the regions you’re supporting
+
+
+Designing Great Apple Watch Experiences 804
+Mike Stern User Experience Evangelist - white male
+
+Apple Watch designed for brief interaction times
+Internal target interaction time reduced from 5 to 2 seconds
+Complications keep that app in memory
+If you’re making a watch app build a complication
+Make complications configurable
+Complications come in multiple sizes - check UI Guidelines
+Use placeholder data from complication preview
+Notifications should be timely be glance able and actionable
+Only show what’s necessary
+Present most important info first
+Have information hierarchy 
+Design your notification
+Use heuristics to send notifications at the right time for the user
+Up to 4 actions for notifications
+App loaded in background when notification shown
+Make actions fast but don’t be afraid to kick in to app if needed
+App snapshots should be up to date and relevant but keep it logical and predictable 
+Don’t show alerts or errors in snapshot
+Prepare for smaller size display in dock
+Detail views can now be swiped through
+8 minutes of return time for apps to stay in front
+Give people feedback that something will take a while - use background tasks and then send a local notification when done. This lets people drop their wrist. 
+Don’t break trust, make sure app doesn’t crash and only give absolute answers when they are true
+Gestures and Digital Crown available
+Sprite/Scene kit for animation
+Design in terms of user flows through the day dropping in and out
+Think of watch apps in terms of single features that can be simply defined
+
+
+Advanced Notifications 708
+Michele Campeotto iOS Notifications - white male
+iOS8 - quick action, iOS9 quick reply, iOS10 quick UI on press
+E.g. Tap on message and can see conversation as well as quick reply
+
+Service extensions download content
+Use notification attachment object to include content
+Only have limited time in service extension
+Added file is managed by the system
+Can create custom ui: Add target notification content extension
+Implement didReceive of UINotificationContentExtension
+Add to Plist to tell system that you are using UI
+Can hide default content of message
+Set preferred content size
+Can set content size ratio to make animating to notification cleaner
+Content.attachment are where downloaded content will be
+Can intercept actions in notification extension - must handle all actions
+Text input actions are available
+Use input accessory views for actions
+
+
+What’s New in HomeKit 710
+Dennis Mathews HomeKit Engineering - Non-white Male
+
+HomeKit supports sharing home data
+Access control by owner
+Provides common protocol over BT or WIFI
+Apple TV is remote access gateway
+End to end secrecy
+HomeKit available everywhere
+Multiple remote devices supported
+Siri available for HomeKit on Apple TV
+New classes of hardware are being added all the time (Air treatment, cameras, doorbells)
+Managing the connections between components is now supported
+Support for home cameras is better
+
+
+Introducing SiriKit 217
+Robby Walker SiriKit Engineering - white male
+Brandon Newedorp SiriKit Engineering - white male
+Corey Peterson SiriKit Design - white male
+
+Provide vocab for your app
+Converts input in to nice consumable object
+
+Domains are high level classes of service
+Intents are per domain actions - 0 or more variables
+Intent response are replies from your app to user - tells what app was able to do e.g. Success/failure, results. Interacts with NSUserActivity
+
+Resolve every parameter in intent. 
+Ensure that the values provided are understood
+Can provide confirmation required e.g. To confirm payee
+Disambiguation to provide list of options to select from
+needMoreDetails 
+Need value
+Unsupported for reason
+Not required
+
+
+Confirm
+Tell Siri the result of intent
+Check state
+Provide intent response for user to confirm
+
+Handle
+Perform the requested action
+Show waiting UI. Ideally in a few seconds. Else set InProcess
+
+Two extension points 
+Intent extension
+Basis of SiriKit. Support one or more intents
+Runs in background while Siri is active
+Handles the steps above
+Some intents are restricted by default but you can increase security for a specific intent
+Apple Pay is available for intent extension
+
+Intent UI Extension
+Bring your ui in to Siri via UIViewController it’s optional
+Can show additional information or update status and displayed alongside other Siri content
+Possible to replace Siri standard interface elements
+Not interactable
+
+Add your app vocal using plist (localized)
+Provide word and pronunciation as well as sample usage
+User vocab added in code via ordered set
+Supports contact names (default if you use system contacts)
+Include keywords names, photo albums
+Not for phone numbers
+Make sure you remove vocab correctly to stop Siri picking it up when user stops of logs out
+Request authorisation when users upgrade
+Intents.framework
+Get map intent for free if you support correctly
+Siri supports multiple phrasings to get in to your app
+
+Siri Design
+Context through conversation - information in the user’s head
+Presents visual feedback
+Sensitive to input style e.g. Hey Siri reads more than pressing button
+Make sure to ask real people to try Siri for your app
+Pick good defaults and make educated guesses
+Keep requests simple, only ask for necessary info
+Limit what you show in response UI and send results to Siri as well
+Siri will show your apps when asking what you can do
+
+Auditing Your Apps for Accessibility 407
+Susumu Harada Accessibility Engineer - male non white
+Patti Hoa Accessibility Engineer - white male
+
+Custom controls should be audited for acessibility
+Make sure if you use views as buttons you set accessibility trait
+Makes UI testing easy
+
+New accessibility inspector
+Automatic audits
+Supports all platforms
+Part of developer package
+Can change settings from inspector
+Run audit to find items with no accessibility description
+Use inspector to dig in to the values for accessibility api
+
+What’s New in Accessibility 202
+Conor Hughes Accessibility Engineer - white male
+
+Covers motor, visual, auditory, learning
+
+Motor
+Switch control available on tv os
+Dwell control for people who use visual controlls
+
+Vision
+Display modification for colour blindness
+Taptic time on watch os
+Magnifier by triple clicking home button (enable in settings)
+
+Hearing
+TTY phone calls from ios10
+
+Learning
+Audio feedback for typing on characters and words
+
+Auditing Apps accessibility
+New accessibility inspector details in another session
+Turn on VoiceOver and check through app
+Accessibility element bool 
+Label consise description
+Traits : what element does
+Frame: where element is (can be modified)
+Value: things with values 
+
+iOS 10 accessibility frame in container space
+
+Demo of improving UI for accessibility
+
+The rotor provides heading info to make apps more skimable . Also for ordering of items that aren’t easy to work out
+
+Accessibility Headers can give user idea of structure
+tvOS remember to provide accessibility labels for elements that aren’t focusable
+
+Introducing Swift Playgrounds 408
+Matt Patenaude Playgrounds Engineer - white male
+Maxwell Swadling Playgrounds Engineer - white male
+Jonaton Penn Playgrounds Engineer - white male
+Izzy Fraimow Playgrounds Engineer - white male
+
+Some good bundled templates
+New document format: playground books for learning 
+Allows pretty formatting and enables you to control what the user sees and needs to type
+Can provide hints
+Has a table of contents
+Resettable
+
+Custom directory format for books
+Can have live view running in separate process. If you do communicate via proxy
+Be a PlaygroundLiveViewMessageHandler to listen from view side
+Authored content is never modified. Saved in edits folder
+Can control peripherals in playgrounds e.g. Bluetooth 
+
+Visual Debugging with Xcode 410
+Chris Miles Xcode Debugger UI - white male
+Tyler Casella Game Technologies
+Daniel Delwood Software Radiologist - white male
+
+Runtime issues elevates runtime issues to same level as other issues
+Threads, UI, Memory
+
+View Debugging 
+Snapshots 70% faster and more accurate
+Blur rendering
+Jump directly to code
+Navigation filtering is better
+Autolayout debugging much better
+Detect ambiguities at runtime
+Demo - of view debugger with autolayout
+
+GKStatemachine has visualisations
+FPS performance gauge shows historical frame rate 
+More stuff for games
+
+Memory graph debugger 
+Root Paths style 
+Cycles view for leaked memory
+Have to enable malloc stack logging from diagnostics can be live allocations only
+Can save memory graphs to a file
+Graphics avoid false positives but may be extraneous
+Helps to validate expectations about objects graph
+Find cycles easy peasy
+
+
+
+Advances in UIKit Animations and Transitions 216
+Bruce Nilo UIKit - white male
+Michael Turner UIKit - white male
+
+Implicit property animations
+UIKit creates animations using start end values
+Animate with duration
+Pacing functions change your animation behaviour e.g. Linear, ease in, ease out, ease in out
+Spring animations can be though of as pacing function
+iOS8 Added additive animations
+
+New features
+Familiar interruptible, scrubabble, reversible, range of pacing, easy to add to animations
+
+￼
+
+￼
+
+Can pause animations and reverse etc
+Can also stop animation then model value because current position
+finishAnimation
+
+
+￼
+￼
+
+Can reverse hard with isReversed or add animation to new finish point
+
+Cubic timing functions now available
+Can specify any spring equation and it takes vector so can spring in 2d
+
+Custom transitions are now interruptible
+Use interaction controller if you’re going to make it interruptible 
+
+Demo included
+
+IsManualHitTestingEnabled allows hit testing against display image
+
+
+
+Optimizing App Startup Time 406
+Nick Kledzik Dyld Architect - white male
+Louis Gerbarg Dyld Visionary - white male
+
+Mach - O file types
+Executable - main binary for appllcation
+Dylib - Dynamic library
+Bundle - Dylib that cannot be linked, only dlopen() eg. Pugins
+Image — Executable dylib or bundle
+Framework - dylib with resources and headers
+
+File divided into segments 4k or 16k
+3 parts - _text, _data, _linkedit
+Lot’s of low level details and theory in this video
+
+Aim for 400ms load time
+Never take longer than 20seconds to launch
+Test on slowest supported device
+
+Launch Recap: Parse images, map images, rebase images, bind images, run image initialisers, call main() call UIApplicationMain(), call appWillFinishLaunching
+
+Warm vs Cold launch
+Warm app and data in memory
+Cold launch app is not in kernel buffer
+Focus on cold launch (reboot device to test)
+Uses DYLD_PRINT_STATISTICS launch argument
+Improve app by using fewer dylibs
+Merge existing dylibs aim for less than 6
+Reduce Objc metadata: classes selectors and categories
+Reduce C++ virtual
+Use swift structs
+Examine machine generated code - use offsets instead of pointers make read only
+OBJC +load methods replace with initialise
+__attribute__ replace with dispatch
+Don’t call dlopen() in initializers
+Don’t create threads in initializers
+
+TLDR use DYLD_PRINT_STATISTICS
+
+Extending your App with Safari App Extensions 214
+Brian Weinstein Safari Engineer - white male
+Damian Kaleta Safari Engineer - white male
+Zachi Li Safari Engineer - white male
+
+Built with Xcode and run native code - sold through App Store bundled with your app
+Customize webpages 
+Block resources
+Add toolbar items
+Display popovers
+Add items to menus
+
+Types: Content blocker, Modification, Extend safari UI
+iOS content blockers now available on macOS and very easy to port
+New API to detect if blocker is enabled
+
+Bridge build in for extensions
+Can specify specific domains for modification pages
+Can see unsigned extensions now using develop menu
+
+Extend Safari UI
+Can add toolbar items. Uses pdf image
+Context menu items when you want to act on part of page
+
+Typography and Fonts 803
+Antonio Cavedoni Type Designer - white male
+SF mono now available for coding
+
+￼
+
+Arrows
+Can have dynamic type for custom fonts
+Number legibility setting for passwords maybe
+Small caps available
+
+
+Advanced Testing and Continuous Integration 409
+Zoltan Foley-Fisher Xcode Engineer - White male
+Eric Dudiak Xcode Engineer - white male
+
+Recap: XCTest, Test Bundles, Test harness(Xcode), Xcode server CI
+
+Testing Concepts
+Compilation -> Hosting -> Observation
+Unit test loaded in to host application for unit tests, all tests in same launch
+UITest in different app, terminate app
+
+XCTestObservationProtocol to do pre and post bundle setup
+Bundle will start
+Suite will start
+Setup observer in info plist principle class
+New Xcode gathers crash logs in test reports
+
+Xcode server
+Advanced triggers now available
+Can mail updates weekly instead of every report now
+Blame reports are now better
+Test running user is now accessible and changeable 
+Disable screen lock, don’t be admin for this user
+
+Xcode build
+Now can skip tests and run specific bundles
+Can build for testing build-for-testing and test without building from binary in deprived data
+
+
+Introducing Expanded Subscriptions in iTunes Connect 301
+Daniel Miao Engineering Manager, iTunes Connect - asian male mixed
+Jennifer Makower Engineer, iTunes Connect -  white female
+
+Autorenewable subscriptions
+70% to 85% subscription proceeds after 1 year
+All categories now can use subscriptions
+Manage subscription can switch between subscriptions in a group
+Upgrades (immediate) and downgrades (end of period)
+Subscription levels now possible in groups 
+IAP page redesigned online
+Can only have 1 subscription per group
+Territory pricing now available
+Price change notifications now available
+Can preserve price for current customers and increase for new customers. Management for this seems good
+
+
+Improving your Existing Apps 213 
+Using modern best practices
+Woody L. Whale to the Knowledge
+
+Don’t support more than 1 version back
+Treat warnings as errors for swift
+Accessibility support is essential
+Use apples new measurement classes
+Support peek, pop and quick actions
+Run swift migrator
+File bug reports - Dupes arnen’t bad
+Asset catalogs should be use - add catalog from file menu (can have multiple catalogs) can import from project in catalog
+Multiple representations of asset are supported - support single vector assets
+Provide all asset sizes!
+Can mix scale and fixed size assets
+Capped images for rounded corners - using asset slicer
+Dependancy injection using segue and unwind to pass back
+Have bundled file + remote updates
+Playground now has sources and resources. Sources must be public to access them
+Playground support framework can have indefinite execution for async
+Can create view controllers in playgrounds. PlaygroundPage.current.liveView = controller.view
+DispatchQueue.main.async
+Put temporary downloaded data in caches folder
+If os(flag)
+
+
+What’s New in Security 706
+Lucia Ballard Secure Transports Engineering Manager - White female
+Simon Cooper Trusted Execution Engineering Manager - white male
+
+Network Security
+HTTPS is the new HTTP
+Transport security: TLS 1.2+
+Exceptions for global domains will need reasonable justifications in 2016
+Web content exceptions
+RC4 and SSLv3 disabled
+SHA-1 and 3EDS will be dropped soon
+Strong TLS is not enough, must trust certificates
+Certificate transparency, publicly verifiable logs. Can be required
+Revocation use OCSP protects users privacy backwards compatible
+Use TLS 1.2 and SHA-2 certificates. Enable OCSP
+CryptoTokenKit
+macOS
+Developer ID can be used with iCloud
+Don’t distribute apps without GM toolchain
+Repackaged apps won’t be signed correctly. Switch to disk images which can now be signed
+Don’t ship ISO
+Gatekeeper Path Randomisation 
+
+
+Introducing Apple File System 701
+Eric Tamura Manager, Local File Systems - Non-white Male
+Dominic Giampaolo Senior Software Engineer, Storage/File Systems - white male
+
+To be used on all systems
+Encryption as a primary features
+
+HSF+ is old and single threaded with rigid data structures
+
+APFS designed and tuned for apple products
+Scale system footprint
+Enhance security capabilities
+Adds new features
+Improved fundamentals: optimised for SSD, crash protection, 64bit, extensible design, low latency, native encryption support
+Space sharing for multiple partitions
+Cloning - copy on write
+Snapshots of disk
+Fast Directory Sizing
+Atomic Safe-Save
+Encryption levels, none, 1 key per volume, multi key, per file, per extent
+Can experiment through command line at the moment
+Limitations: not boot drive, no time machine, no fusion drive or FileVault, case sensitive only, SMB only
+
+Rollout plan
+In place upgrade plan
+Default filesystem from 2017
+
+
+
+What’s new in watchOS 3 208
+Josh Shaffer watchOS Engineering - white male
+
+Optimise navigation and system performance
+Glanceable, Actionable, Responsive
+
+Use complications and notifications where appropriate 
+Focus on shortening interactions
+Background app refresh
+Favourite apps kept in memory 
+Make sure snapshots are up to date
+Flexibility on what snapshots show but make sure animation is good if you don’t use standard app UI
+Silent complication update for apps on the watch face 
+Scheduled updates for docks can update once an hour at least
+Can start a push update from phone
+Apple apps have been redesigned for faster interactions
+Vertical paging behaviour added
+Can schedule local notifications to get users attention back when they drop their wrist. Can get notifications to only show on the watch
+Can be brought back to last app for up to 8 mins
+Fitness apps get background runtime 
+Increased access to sensors and continuous 
+Capped average CPU usage for background
+Raw access to Digital Crown 
+Gyro available now as well as accelerometer
+SpriteKit and SceneKit + Inline video available
+CloudKit available
+Apple Pay can be used directly from watch for in app payments
+New Watchface gallery in iPhone. Need to implement clock kit api. Then build a complication bundle
+Configure watch faces and dock on iPhone 
+
+
+
+What’s New in tvOS 206
+Hans Kim tvOS Engineer - non-white male
+Marshall Huss - tvOS Engineer - white male
+Brandon Kieft - tvOS Engineer - white male
+
+64bit only, always connected to wifi
+CloudKit + cloud kit JS 
+Use on demand resources
+App + roesources < 200mb, initial install tags up to 2gb, on demand tags 2gb, +total 20gb fetched
+New parallax affect by implementing layered image. Use parallax preview app or asset catalogs
+Top shelf apps can provide deep links and previews
+Universal purchase and auto download 
+tvOS built using familiar technologies
+TVMLKit provides template apps for content
+Homekit, PhotoKit and map kit all come to tv
+Can no require controllers
+
+
+Can use iPhone as game controller
+Badges and push notifications 
+Dark appearance is opt in
+
+See Apple TV tech talks from earlier in the year
+
+
+Introducing Search Ads 302
+Lindsay Verity Director Product Management - white female
+Casey Fictum Product Manager - white male
+Eric Hall Manager, Data Engineering - white male
+
+Current discovery
+Featured, Categories, Top Charts, Search
+Best way to get found is improve metadata
+
+65% of downloads start with search
+
+Single sponsored ad, must be relevant to search query 
+Relevance is built from metadata and user responses
+
+Pricing cost per tap, using second price auction 
+
+Campaign building needs
+Select app (auto matching to terms), budget (max daily spend, cap), payment info 
+
+Custom campaigns
+Keyword lists provided, Match types, can optimise bids per keywords
+Don’t show adds to existing users
+Can target by device location, age group, gender
+There’s UI for campaigns on web which shows keyword matching
+Keyword attribution for roi
+Can target people that have downloaded my app or not or other apps
+Can choose device iPad/iPhone
+Attribution API
+
+Get prepared by optimising metadata, Work out customer value, Implement attribution API
+
+
+What’s New in LLVM 405
+Alex Rosenberg Final Boss Level, Compilers and Stuff - white male
+Duncan Exon Smith Manager, Clang Front end - white male
+Gerolf Hoflehner Manager LLVM Backend - non-white male
+
+ LLVM is open source
+Clang providers
+￼
+
+
+
+LLVM has other tools, binary utilities, LLDB
+350 active commiters to LLDB
+
+Obj-c has class properties
+C++ has thread local storage
+Use libc++ now
+Better type checking in Objective c
+Prevents self being added to a set
+Catches some infinite recursion 
+Link time optimisation for c++
+
+Reduced stack usage via stack packing - reusing stack slots
+Shrink Wrapping by avoiding allocations in branched code
+Multiple add sometimes better as simple instructions
+Software prefetching to optimise cache hits
+Non temporal stores can be used to store things direct to memory - use in hot loops
+Libc++ full support for C++14
+
+
+
+What’s New in Apple Push Notification Service 724
+Mayur Mahajan Apple Push Notification Service Engineer
+
+Review: HTTP/2, Instant feedback from requests from server e.g. Token removed, Larger Payloads up to 4k, Simplified certs
+
+New: Token Authentication coming later this year
+Simplified auth when connecting, Secure, Easy to generate, no more expired certs
+
+
+
+How iOS Security Really Works 705
+Ivan Krstic Head of Security Engineering & Architecture  - White Male
+
+Mobiles have all your data
+Attackers could be crime, business competitors, service providers, nation states
+
+iOS security is built in to silicon
+Secure boot checks each part of boot process
+Data Protection - 10 attempts to login
+Isolating apps and sandboxing features
+Code signing, hash everything
+Touch ID - 50% up to 90% passcode 
+
+Upgrades mean OS stays secure
+Transport Security is required now
+
+What’s net in Cocoa Touch 205
+Olivier Gutknecht Senior Engineering Manager, UIKit
+
+Adaptability support boosted
+Core Technologies
+GCD object api
+UIPasteboard API just works for copy across devices
+Allows expiry times
+Wide colour spaces via standard colour init + p3
+UIGraphicsRenderer class - fully colour managed and block based
+Asset catalog supports compression, wide colours via app thinning
+New Accessibility Inspector
+Warnings for bad accessibility
+SFSpeechRecgonizer for continuous speech recognition
+Smarter text fields with better type recogniser
+Set adjustsFontForContentSizeCategory = true to get dynamic type 
+Tab bar customisation, badges and unselected tint color
+ WKWebView can control peek pop better
+Custom peek pop UI
+Refresh control on scrollview — therefore collection view too
+Collection view support smooth scrolling for free + tableview
+UIViewPropertyAnimator: Interruptible, Scrubbable, reversible, rich timing, like a timeline
+Blend gestures and animation
+CoreData - query generations, concurrency improvements, tooling improvements
+CloudKit Managed document sharing + apple ui for invitations
+Adopt NSUserActivity to get smarts
+CSSearchQuery to search data you’ve indexed with spotlight
+Widget now appear on lock screen. Can be fixed or variable height
+User notifications are unified with remote notifications and platforms 
+Service extensions to process notifications before showing to user
+Embeded UIView in notifications, not intractable but can use notification actions
+CallKit for Voip people
+Intent kit for Siri can include ui as response
+Intents can be shared and used by other apps?
+Sticker and iMessage apps
+
+
+What’s New in Foundation for Swift 207
+Tony Parker Foundation, Apple - White Male
+Michael LeHew Foundation, Apple
+  
+Design guidelines: fast, safe, expressive.
+Consistent experience 
+Foundation is core to most development
+NSPrefix dropped in swift foundation
+Value types for foundation many classes
+￼
+
+Objective c class properties can be imported properly now
+Timers can have closures now!! Runloop.main.add(timer)
+Measurements and Units classes
+URL gets URLResourceValues struct
+
+
+What’s New with Wallet & Apple Pay 704
+https://developer.apple.com/videos/play/wwdc2016/704/
+Nick Shearer - iOS Apps and Frameworks
+Leo Cantelmo - Watch SW Engineer
+
+Wallet usage increasing
+Apps shortcuts placed on passes - can deep link to app for e.g. Topup
+Value Added passes using NFC
+Signup to loyalty program through wallet
+Passes must be signed using NFC signing cert
+Card issuers can setup cards in Apple Pay from your app
+Present cards directly from your app
+Instore payment button style
+Associate app with a card
+
+Networks can be set to use any supported network. Propogates down to whitelabel
+
+Adding Apple Pay to watch kit, safari and extensions
+
+PKPaymentAuthorizationController can be cross platform
+Debug -> Authorise Apple Pay from simulator
+Use WKInterfacePaymentButton
+
+Extensions support Apple Pay e.g. Order rides from maps with uber or pay for tickets with friends in method
+Applepay Sandbox!!!!
+Create testing iCloud account, login with test device, set region then use tests cards 
+
+
+
+Swift API Design Guidelines 403
+Doug Gregor - Swift Engineer - male white
+Michael Ilseman Swift engineer - 
+
+Lots of renaming
+Swift character is different that objective-c
+Clarity at the point of use
+Don’t optimize for bad code
+Omit needless words
+Setters and getters and use #selector
+#keyPath comes to swift 3 
+Use as @objc to specify names exposed to objc
+Old api will produce warnings
+NSSwiftName from objective c to give names to swift 
+NS_EXTENSIBLE_STRING_ENUM to make enums from obj c string
+
+
+
+Apple Pay on the Web 703
+Nick Shearer iOS Apps and Frameworks - white male
+Anders Carlsson Webkit
+
+High cust sat
+Best in class UX
+Sierra only
+Unique tokens per user and merchant
+Only you can decrypt to see your users Apple Pay tokens
+
+For on the web
+Have developer account
+HTTPS + complies with AP guidelines
+Need to register domain to get identifier, certificate, 
+
+Web page must create a merchant session from web server - don’t generate client side
+Only request when user presses the button
+iOS 10 on safari
+
+ApplePaySession.canMakePayments( doesn’t test card)
+canMakePaymentsWithActiveCart (takes a merchant id, Asynchronous
+ApplePaySession(1, paymentRequest) takes version
+
+￼
+
+paymentauthorized Dom event when done has a payment property
+￼
+Guest checkout flows are powerfull
+Respect Apple HIG for Apple Pay
+
+
+
+iMessage Apps and Stickers 204 , Part1 & 2
+Bhaskar Sarma Messages Engineer - Non-white Male
+Lily Hashemi Messages Engineer - Non-white Female
+
+Write apps for messages
+3 types of content
+Interactive messages
+Stickers
+Normal content
+
+Messages App Store in messages in app drawer
+Inline app attribution to let people get the app
+Build using similar technologies
+IAP, Apple Pay, Camera available
+Runs on iOS10
+Can send recents from watch
+
+Messages Framework
+Built on app extension technology
+Rewatch creating extensions wwdcvideo
+If you don’t provide a containing app then app only shows in message App Store but you still need icons
+Stickers have specific easy app where you can just provide images
+Can have “gif” type stickers
+3 cell sizes for display 
+
+
+Creating a custom sticker experience
+If you want to control presentation 
+Implement MSMessageAppVC - Kinda like cv
+Apps can toggle between compact and extended mode
+Manually handle animation of stickers in MSStickerView
+
+
+What’s New in Xcode App Signing 401
+Joshua Pennington Tools Engineering Manager - white male
+Itai Rom Tools Engineer
+
+Signing prevents people spoofing app
+
+Fundamentals
+Uses code sign to check app hasn’t been modified and signs you
+Certificate establishes your identity - issued by apple - either dev or distribution - require private key which must be in keychain - created when certs are created
+Provisioning profile about apps permissions - issued by apple - app specific - allows running on devices - whitelists entitlements
+Entitlements declare support for capabilities - defined per target - capabilities tab -
+When you want to sign Xcode looks for most recent cert, then most recent profile (matching bundle id), these are joined and embedded in app with code sign
+Old limit of 1 dev cert removed for development. Distribution certs still limited to 1. Backwards compatible
+
+Fix issue button is gone and signing redesigned
+New workflows and ui with actionable messaging and status reporting
+Will alert you about new devices before adding them
+Demo of automatic signing
+For development signing
+Limited to Xcode created provisioning
+
+Customised signing
+Uncheck box in general tab
+Build setting 
+Errors inline
+Profile details displayed in UI
+New build setting PROVISIONING_PROFILE_SPECIFIER referenced by name
+
+Best practise
+Use automatic
+Add all dev to team
+Use capabilities tab
+Don’t set code sign identity!!
+Use general tab UI
+
+Dev sign the archive of your app then Distribution / organiser resigns
+
+Getting Started with Swift 404
+Dave Addey Xcode Documentation Engineer - White male
+Brian Lanier Swift Documentation team manager - White Male
+Alex Martini Swift Documentation Engineer
+
+Swift basics. Very good intro to the language for existing programers
+
+Whats new in Swift 402
+Chris Latner - white male
+Ewa Matejeska - non-white Female
+Goals - to develop an open community
+Portability, get fundamentals right, be awesome
+Apple uses swift in console, agents (e.g. New pip), swift learning app, in Xcode new documentation, dock
+
+Swift package manager will be integrated with xcode
+Swift evolution process driven by proposals and community discussion
+
+Swift 3 - Source compatability focus
+Naming rules - Optimise for clarity not berevity
+Obj imported api get lots better. C apis, String constants to enum
+Funcs get all argument labels
+Generic constraints are at the end
+Some features removed e.g. ++, var n method sigs
+Syntax cleanups e.g. __FILE__ to #file
+Type system get’s more strict
+Implicit unwrapped optional gets changed behaviour
+Standard library collections change way indexing works from I.successor() to collection.index(after)
+Floating point numbers work better
+Also .pi on float 
+ 
+Hashing, Dicts faster
+Whole module optimisation on by default
+Code size reduced
+Documentation much better and navigable
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
